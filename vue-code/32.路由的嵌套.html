@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>32.路由的嵌套</title>
+    <script src="lib/vue.js"></script>
+    <script src="lib/vue-router.js"></script>
+    <style>
+        #account_div{
+            border: 2px solid crimson;
+        }
+    </style>
+</head>
+<body>
+    <div id="div">
+        <router-link to="/account">account</router-link>
+        <router-view></router-view>
+    </div>
+
+    <template id="account">
+        <div id="account_div">
+            <p>这里是router-view渲染的模板</p>
+
+            <!----router-link是与组件平级---->
+            <!----to是路由的地址---->
+            <router-link to="/account/login">登录</router-link>
+            <router-link to="/account/register">注册</router-link>
+            <!----router-view是渲染成匿名组件的---->
+            <!----渲染对应的模板---->
+
+            <router-view></router-view>
+        </div>
+    </template>
+
+    <template id="login">
+        <h3>登录</h3>
+    </template>
+    <template id="register">
+        <h3>注册</h3>
+    </template>
+
+    <script>
+        var account={
+            template:'#account',
+        }
+        var login={
+            template:'#login',
+        }
+        var register={
+            template:'#register',
+        }
+
+        var router=new VueRouter({
+            routes:[
+                {
+                    path:'/account',
+                    component:account,
+                    children:[
+                        //login自动匹配到account之下不需要写斜线
+                        {path:'login',component:login},
+                        {path:'register',component:register},
+                    ]
+                },
+                ],
+
+        })
+        var vm=new Vue({
+            el:'#div',
+            router,
+        })
+    </script>
+</body>
+</html>

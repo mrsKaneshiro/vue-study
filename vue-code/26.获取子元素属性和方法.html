@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>26.Vue获取DOM元素和组件</title>
+    <script src="lib/vue.js"></script>
+    <!---可以获取到子组件的数据和方法-->
+</head>
+<body>
+<div id="app">
+    <h3 ref="ph3">这里是父组件</h3>
+    <input ref="input" type="button" value="click" @click="showParentName">
+    <login ref="login"></login>
+</div>
+<template id="login">
+    <div>
+        <h3 ref="h3">这里是子组件</h3>
+    </div>
+</template>
+<script>
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            name:'老高',
+        },
+        methods:{
+            showParentName(){
+                //获取子组件的数据
+                console.log(this.$refs.login.name)
+                //调用子组件的方法
+                this.$refs.login.showSonName()
+                //获取页面DOM元素
+                console.log(this.$refs.ph3.innerText)
+                //获取子组件的DOM元素
+                console.log(this.$refs.login.$refs.h3.innerText)
+            }
+        },
+        components:{
+            'login':{
+                template:'#login',
+                data:function () {
+                    return{
+                        name:'小高',
+                    }
+                },
+                methods:{
+                    showSonName(){
+                        console.log(this.name)
+                    }
+                }
+            }
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>23.全局组件添加data和method</title>
+    <script src="lib/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <my-component1></my-component1>
+    <my-component2></my-component2>
+    <my-component3></my-component3>
+</div>
+<template id="temp">
+    <div>
+        <input type="button" value="+1" @click="count++">
+        <h6>{{count}}</h6>
+        <h6>template当中的插值表达式都是从component组件定义中的data得到的，绝对不是实例中的data</h6>
+    </div>
+</template>
+<script>
+    //定义全局组件
+    //好处：对于公用同一个模板，可以定义每个组件的各自数据。
+    Vue.component('my-component1',{
+        template:'#temp',
+        data:function () {
+            return { count:0}
+        }
+    })
+    Vue.component('my-component2',{
+        template:'#temp',
+        data:function () {
+            return { count:0}
+        }
+    })
+    Vue.component('my-component3',{
+        template:'#temp',
+        data:function () {
+            return { count:0}
+        }
+    })
+    var vm=new Vue({
+        el:'#app',
+        data:{}
+    })
+</script>
+</body>
+</html>

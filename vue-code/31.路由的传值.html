@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>31.路由的传值</title>
+    <!----实验目的：熟悉路由的定义过程----->
+    <!----传值----->
+    <!----使用Param 和Query获取传入的值----->
+    <!----step1 引入相关包----->
+    <script src="lib/vue.js"></script>
+    <script src="lib/vue-router.js"></script>
+</head>
+<body>
+<div id="app">
+    <router-link to="/login?id=10&name=zhangsan">登录</router-link>
+    <router-link to="/register/100&lisi">注册</router-link>
+    <router-view></router-view>
+</div>
+
+<template id="login">
+    <h3>登录</h3>
+</template>
+<template id="register">
+    <h3>注册</h3>
+</template>
+
+<script>
+    var login={
+        template:'#login',
+        created(){
+            //组件生命周期钩子********使用query 获取
+            console.log(this.$route.query.id,this.$route.query.name)
+        }
+    }
+    var register={
+        template:'#register',
+        data:function(){
+            return{
+                obj:{msg:'模板对象可包含的键与值'}
+            }
+        },
+        created(){
+            //组件生命周期钩子********使用params 获取
+            console.log(this.$route.params.id,this.$route.params.name)
+        }
+        //使用组件的方法怎么获得各种参数？
+    }
+
+    var routerObj=new VueRouter({
+        routes:[
+            {path:'/',redirect:'/login'},
+            {path:'/login',component:login},
+            {path:'/register/:id&:name',component:register},
+        ],
+    })
+
+    var vm=new Vue({
+        el:'#app',
+        router:routerObj,
+    })
+</script>
+</body>
+</html>

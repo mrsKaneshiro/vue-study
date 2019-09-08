@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>动画的淡入淡出，以及animate.css的使用</title>
+    <script src="lib/vue.js"></script>
+    <link rel="stylesheet"  href="lib/animate.css">
+    <style>
+        /**
+        enter:在v-if/v-show=true的时候启动，v-leave是 false的时候启动。
+        v-enter:定义进入过渡的开始状态
+        v-enter-active:进入过渡生效时的状态
+        v-enter-to:定义进入过渡的结束状态
+         */
+        .v-enter{
+            opacity: 0.1;
+        }
+        .v-enter-active{
+            /*transition 过度当时的时间，属性的一些设置*/
+
+        }
+        .v-enter-to{
+            transition: all 1s ease;
+            opacity: 1;
+            /*transform具体转换的一些方法*/
+            transform: translateX(150px);
+        }
+        .v-leave{
+            /*这个设置没有用，因为v-leave的状态和v-enter-to的一样。*/
+            opacity:1;
+        }
+        .v-leave-active{
+
+        }
+        .v-leave-to{
+            /*transition 可以写道过度结束的部分里面*/
+            transition: all 1s ease;
+            /*这个设置没有用，因为flase,动画执行到下半场借书，opacity一定是0*/
+            opacity:0.1;
+            transform: translateY(50px);
+        }
+
+    </style>
+</head>
+<body>
+<div id="app">
+    <input type="button" value="动画" @click="flag=!flag;coon()">
+    <transition :duration="{enter:400,leave:400}">
+        <h3 v-if="flag">这是一个H3</h3>
+    </transition>
+
+    <!--使用第三方的类库-->
+    <input type="button" value="动画2" @click="flag2 =!flag2 ; coon2()">
+    <transition :duration="200" enter-active-class="animated bounceInLeft" leave-active-class="animated bounceInUp"  >
+        <h6 v-if="flag2">这是一个H6</h6>
+    </transition>
+</div>
+<script>
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            flag:false,
+            flag2:false,
+        },
+        methods:{
+            coon(){
+                if(this.flag){
+                    console.log('true')
+                }else{
+                    console.log('false ,隐藏H3')
+                }
+
+            },
+            coon2(){
+                if(this.flag2){
+                    console.log('true')
+                }else{
+                    console.log('false ,隐藏H3')
+                }
+
+            }
+        },
+
+    })
+</script>
+</body>
+</html>

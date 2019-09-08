@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>06.模拟小球 半场动画的实现</title>
+    <!--目的：利用钩子函数实现半场动画-->
+    <!--步骤：1.将需要控制的元素用标签<transition>包围。注意：<transition> can only be used on a single element-->
+    <!--步骤：2.判断上下半场 如果设置的是从无到有的动画，则设置enter，如果是从有到无的动画，则设置leave -->
+    <!--步骤：3.为transition添加动画事件，@before-enter,@enter,@after-enter,@enter-cancel 等-->
+    <!--步骤：4.在methods中添加事件监听函数-->
+    <script src="lib/vue.js"></script>
+    <style>
+        #ball{
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+<div id="div">
+    <input type="button" value="快到碗里来" @click="change">
+    <transition @befor-enter="beforeEnter()" @enter="enter" @after-enter="afterEnter">
+        <div id="ball" v-if="flag"></div>
+    </transition>
+</div>
+<script>
+    var vm=new Vue({
+        el:'#div',
+        data:{
+            flag:false
+        },
+        methods:{
+            change(){
+                this.flag=!this.flag
+                console.log(this.flag)
+            },
+            /**
+             * 动画的事件侦听函数，可以传入el参数，表示当前动画作用的元素，是一个底层的DOM元素
+             * 在enter() leave()事件侦听函数中，可以传入done函数，并在函数结尾调用
+             * * 这等价于在enter() leave()事件侦听函数一结束就调用afterEnter()或afterLeave方法
+             */
+            beforeEnter(el){
+                //el是对当前div的控制
+                //动画声明周期函数：动画开始之前
+                el.style.width=0;
+                el.style.height=0
+
+            },
+            enter(el,done){
+                el.offsetWidth;
+                //动画声明周期函数：动画开始的效果
+                //transition='all 1s ease' 动画过渡的效果设置
+                el.style.transition='all 1s ease'
+                //transform:'translate(x,y)' 表示元素的位移量
+                el.style.transform='translate(150px,400px)'
+                done()
+            },
+            afterEnter(el){
+                //动画结束的时候触发
+                this.flag=!this.flag;
+                //el.style.opacity=0.5
+            }
+        }
+    })
+</script>
+</body>
+</html>

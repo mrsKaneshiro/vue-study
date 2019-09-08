@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-if &&v-show</title>
+    <script src="lib/vue.js"></script>
+</head>
+<body>
+<div id="div">
+    <h4 v-if="flag">这里是v-if</h4>
+    <h4 v-else="flag">这里是v-show</h4>
+</div>
+<script>
+    var vm=new Vue({
+        el:'#div',
+        data:{
+            flag:false,
+        },
+        methods:{}
+    })
+</script>
+</body>
+</html>

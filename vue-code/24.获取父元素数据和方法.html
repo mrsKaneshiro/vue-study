@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>24.向子组件传入数据和方法</title>
+    <script src="lib/vue.js"></script>
+
+</head>
+<body>
+    <div id="app">
+        <my-comp1 :parentname="name" @parentfunc="loadFunc"></my-comp1>
+        <div>
+            <p>这是一个模板外的区域</p>
+            <p>从父类获取子类的数据实现</p>
+            <input type="button" value="获取子类数据" @click="showSonName">
+            <p>我儿子的名字是：{{sonName}}</p>
+        </div>
+    </div>
+
+    <template id="temp">
+        <div>
+            <h1>这里是一个vm实例的私有组件</h1>
+            <h3>我的名字叫做----{{son.name}}</h3>
+            <h3>我的父亲的名字叫做----{{parentname}}</h3>
+            <input type="button" value="父亲名字" @click="showParentName">
+            <input type="button" value="自己名字" @click="showSonName">
+        </div>
+    </template>
+
+    <script src="24.向组件传入数据和方和.js"></script>
+</body>
+</html>

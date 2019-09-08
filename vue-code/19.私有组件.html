@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>19.私有组件</title>
+    <script src="lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <!--作用域app 在这里私有的组件可用-->
+        <vm-component></vm-component>
+    </div>
+    <div id="div">
+        <!--作用域div 在这里私有的组件不可用
+        <vm-component></vm-component>
+        -->
+        <priviteemp></priviteemp>
+    </div>
+    <template id="templateId">
+        <div>
+            <h3>这是第2个实例的私有组件</h3>
+            <h3>但是，模板是共有，全局的模板。</h3>
+            <h3>私有模板应该如何挂数据？</h3>
+        </div>
+    </template>
+    <script>
+
+        var vm=new Vue({
+            el:'#app',
+            data:{
+                //访问不到的！！需要传值
+              msg:'hello'
+            },
+            components:{
+                'vm-component':{template:'<h1>这是一个私有的组件，组件名：vm-component</h1>'},
+            }
+        })
+
+
+        var priviteemp={
+            template: '#templateId'
+        }
+        var vm2=new Vue({
+            el:'#div',
+            components:{
+                //更简便的定义方式，直接创建一个模板的字面量并取一个名字使用。
+                priviteemp
+            }
+        })
+    </script>
+</body>
+</html>

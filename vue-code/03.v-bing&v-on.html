@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-bind绑定属性： v-on绑定事件@</title>
+    <script src="lib/vue.js"></script>
+</head>
+<body>
+    <div id="div">
+        <input type="button" :value="my" title="这是个按钮"></input>
+        <input type="button" value="2" :title="myTitle" v-on:click="show"></input>
+        <input type="button" value="3" v-bind:title="myTitle+'123'"></input>
+    </div>
+    <script>
+        var vm=new Vue({
+            el:'#div',
+            data:{
+                my:1,
+                myTitle:'这是myTitle 属性绑定成功'
+            },
+            methods:{
+                show:function () {
+                    alert("methods+点击成功!!!")
+                },
+            }
+        })
+    </script>
+</body>
+</html>

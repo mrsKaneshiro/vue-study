@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>33.命名视图实现经典布局</title>
+    <script src="lib/vue.js"></script>
+    <script src="lib/vue-router.js"></script>
+</head>
+
+<body>
+
+<div id="app">
+    <router-view ></router-view>
+    <router-view name="left"></router-view>
+    <router-view name="right"></router-view>
+</div>
+
+<template id="top">
+    <div>
+        <p>这里是TOP组件</p>
+    </div>
+</template>
+<template id="left">
+    <div>
+        <p>这里是left组件</p>
+    </div>
+</template>
+<template id="right">
+    <div>
+        <p>这里是right组件</p>
+    </div>
+</template>
+
+<script>
+    var top={
+        template:'#top'
+    }
+    var left={
+        template:'#left'
+    }
+    var right={
+        template:'#right'
+    }
+
+    var router=new VueRouter({
+        routes:[
+            {
+                path:'/',
+                components:{
+                    default:top,
+                    'left':left,
+                    'right':right
+                }
+            }
+        ]
+    })
+    var vm=new Vue({
+        el:'#app',
+        router,
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>25.组件案例</title>
+    <script src="lib/vue.js"></script>
+</head>
+<body>
+    <div id="app">
+        <cmtbox @parentfunc="loadFunc()"></cmtbox>
+        <ul v-for="item in list" :key="item.id">
+            <li>{{item}}</li>
+        </ul>
+    </div>
+
+    <template id="commentBox">
+        <div>
+            <label>评论人:</label>
+            <input type="text" v-model="cmtUser">
+
+            <label>评论内容:</label>
+            <textarea v-model="cmtComments"></textarea>
+
+            <input type="button" value="发表评论" @click="addData">
+        </div>
+    </template>
+
+    <script src="25.组件案例.js"></script>
+</body>
+</html>

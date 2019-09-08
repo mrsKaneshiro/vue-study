@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>品牌案例</title>
+    <script src="lib/vue.js"></script>
+    <script src = 'https://cdn.jsdelivr.net/npm/vue-resource@1.5.1 '></script>
+    <style>
+        #head_div{
+            background-color: lightskyblue;
+            height: 5%;
+            font-family: Arial sans-serif;
+        }
+        table{
+            width: 80%;
+            height:30%;
+        }
+        table,td,th{
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <div id="div">
+        <div id="head_div">添加品牌</div>
+
+        <label for='ID'>ID:</label>
+        <input type="text" name="ID" v-model="ID">
+
+        <label for='name'>NAME:</label>
+        <!----或者可以用keyup.enter='add' enter是自带的案件修饰符---->
+        <input type="text" name="name" v-model="name" @keyup.f2="add">
+
+        <input type="button" value="添加" @click="add()">
+
+        <label for='search'>SEARCH:</label>
+        <input type="text" name="search" v-model="keywords" v-focus v-fontcolor="'cyan'">
+        <input type="button" value="查询" >
+
+        <table>
+            <tr>
+                <th>id</th>
+                <th>name</th>
+                <th>cTime</th>
+                <th>operation</th>
+            </tr>
+            <tr v-for="item in search(keywords)"  :key="item.id">
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.cTime | filterName() }}</td>
+                <td >
+                    <a href="" @click.prevent="del(item.id)">删除</a>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div id="div2"><p v-c="'bold'" v-color="'red'">这里是一个局部过滤器{{mesg|privateFilters()}}</p></div>
+    <script>
+        /***
+         * 定义一个全局的自定义指令
+         */
+        Vue.directive('focus',{
+            bind:function (el,binding) {
+                console.log(binding.name)
+            },
+            inserte:function (el) {
+                el.focus();
+            },
+            update:function () {
+                //钩子函数
+            }
+        })
+
+        Vue.directive('c',{
+            bind:function(el,binding){
+                console.log(binding);
+                el.style.fontWeight=binding.value;
+            }
+        })
+        /***
+         * 添加全局过滤器，目的是让日期格式化输出
+         */
+        Vue.filter('filterName',function(data,patter=''){
+            var dt=new Date(data)
+            var y=dt.getFullYear();
+            var m=(dt.getMonth()+1).toString().padStart(2,0);
+            var d=dt.getDate().toString().padStart(2,0);;
+            if(patter.toString()=='ymd'){
+                return  `${y}-${m}-${d}`
+            }
+            else {
+                var h=dt.getHours().toString().padStart(2,0);;
+                var min=dt.getMinutes().toString().padStart(2,0);;
+                var s=dt.getSeconds().toString().padStart(2,0);;
+                return  `${y}-${m}-${d}` +" "+`${h}:${min}:${s}  `
+            }
+        })
+
+        //添加一个全局的自定义修饰符
+        Vue.config.keyCodes.f2=113;
+
+        var vm=new Vue({
+            el:'#div',
+            data:{
+                ID:'',
+                name:'',
+                keywords:'',
+                list:[
+                    {id:'01',name:'宝马',cTime:new Date()},
+                    {id:'02',name:'奔驰',cTime:new Date()},
+                ]
+                },
+            methods:{
+                    add( ){
+                    this.list.push({
+                        id:this.ID,
+                        name:this.name,
+                        cTime:new Date()
+                    })
+                    this.ID=''
+                    this.name=''
+                },
+                del(itemId){
+                    this.list.some((item,i)=> {
+                        if(item.id==itemId){
+                            this.list.splice(i,1)
+                        }
+                    })
+                    console.log("我已经删除")
+                },
+                search(keywords){
+                    let newList=[]
+                    this.list.filter(item=>{
+                        if(item.name.indexOf(keywords)!=-1){
+                            newList.push(item)
+                        }
+                    })
+                    return newList
+                }
+            },
+            directives:{
+                //简写形式
+                'fontcolor'(el,binding){
+                    el.style.color=binding.value;
+                }
+                    /*
+                    bind:function (el,binding) {
+                        el.style.color=binding.value;
+                     */
+            }
+        })
+        var vm2=new Vue({
+            el:'#div2',
+            data:{
+                mesg:new Date(),
+            },
+            methods:{},
+            filters:{
+                privateFilters:function(mesg,patter=''){
+                    /**
+                     * 上面这句话用ES6有三种写法
+                     * 1.privateFilters:function(mesg,patter=''){}
+                     * 2.privateFilters:(mesg,patter='')=>{}
+                     * 3.privateFilters(mesg,patter=''){}
+                     */
+                    var dt=new Date(mesg)
+                    var y=dt.getFullYear();
+                    var m=dt.getMonth()+1;
+                    var d=dt.getDate();
+                    if(patter.toString()=='abc'){
+                        return  `${y}-${m}-${d}`
+                    }
+                    else {
+                        var h=dt.getHours();
+                        var min=dt.getMinutes();
+                        var s=dt.getSeconds();
+                        return  `${y}-${m}-${d}` +" "+`${h}:${min}:${s}  `
+                    }
+                }
+            },
+            directives:{
+                /**
+                 * 定义一个私有指令
+                 */
+                'color':{
+                    bind:function (el,binding) {
+                        //console.log(binding);
+                        console.log(binding.value)
+                        //console.log(binding.expression);
+                        el.style.color=binding.value;
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

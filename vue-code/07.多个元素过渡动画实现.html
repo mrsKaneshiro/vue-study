@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>07.多个元素过渡动画实现</title>
+    <!--目的：实现多个元素共用同一个样式的动画，并且元素可以单独的实现动画-->
+    <!--分析：1.先把需要共用动画的元素用<transition-group>包围起来-->
+    <!--分析：2.判断上下半场 如果是上半场(从无到有)就在v-enter,v-enter-active,v-enter-to,中添加样式-->
+    <!--分析：3.对元素应该有一个key属性，控制当前操作元素，同时，可以通过if 来触发动画。-->
+    <script src="lib/vue.js"></script>
+    <style>
+        ul{
+            width: 50%;
+        }
+        li{
+            border: black solid 1px;
+            padding-left: 5px;
+            font-size: 17px;
+            margin: 5px;
+        }
+        li:hover{
+            background-color: blueviolet;
+            transition: all 1s ease;
+        }
+        /*为transition-group中元素添加样式*/
+        .v-enter{
+            /*enter里面设置进入动画，包括Add添加一个元素*/
+            transform: translateY(150px);
+        }
+        .v-enter-active{
+            transition: all 1s ease;
+        }
+        .v-enter-to{
+            opacity: 1;
+        }
+
+        .v-leave{}
+        .v-leave-active{
+            transition: all 1s ease;
+            position: absolute;
+        }
+        .v-leave-to{
+            opacity: 0;
+            transform: translateY(150px);
+        }
+        .v-move{
+            /*v-move 和 v-leave-active 结合使用，能够让列表的过渡更加平缓柔和*/
+            /*v-move 特性。会在元素的改变定位的过程中应用。
+                比如列表中有元素被删除,其他元素会上移
+                设置了v-move就会在这起作用.*/
+            transition: all 1s ease;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <label>Id:</label>
+    <input type="text" v-model="id" >
+
+    <label>Name:</label>
+    <input type="text" v-model="name">
+
+    <input type="button" value="添加" @click="add()">
+    <!--appear 可以使得页面刚加载的时候，所有已有的元素，同时使用公有动画载入。-->
+    <!--tag='ul'可以避免transition渲染成span(行内元素)包含li(块级元素)-->
+        <transition-group appear tag="ul">
+            <!----列表的过渡----->
+            <li v-for="(item,i) in list" :key="item.id" @click="del(i)">{{item.id}}----{{item.name}}</li>
+        </transition-group>
+
+</div>
+<script>
+    var vm=new Vue({
+        el:'#app',
+        data:{
+            id:'',
+            name:'',
+            list:[{id:1,name:'张三'},
+                 {id:2,name:'李四'},
+                 {id:3,name:'王五'},
+                 {id:4,name:'李六'},
+                 ]
+        },
+        methods:{
+            add(){
+                this.list.push({id:this.id,name:this.name});
+                this.name=this.id=''
+            },
+            del(i){
+               this.list.splice(i,1)
+            }
+        }
+    })
+</script>
+</body>
+</html>

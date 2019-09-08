@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>21.不同组件切换</title>
+    <script src="lib/vue.js"></script>
+    <!--需求说明:如果点击SAY YES 切换组件1 -->
+    <!--需求说明:如果点击SAY NO 切换组件2-->
+</head>
+<body>
+    <div id="div">
+        <input type="button" value="say yes" @click="flag=true"/>
+        <input type="button" value="say no" @click="flag=false"/>
+        <btn-component v-if="flag"></btn-component>
+        <btn-components  v-else="flag"></btn-components>
+    </div>
+    <template id="temp">
+        <h6>这是组件1</h6>
+    </template>
+    <template id="temp2">
+        <h2>这是组件2</h2>
+    </template>
+<script>
+    /**
+     * v-if v-else 分别控制组件的显示
+     * 但只能改变两个组件的切换 有局限
+     * 改变flag的值，实现组件的切换
+     */
+    Vue.component('btn-component',{
+        template:'#temp',
+    })
+    Vue.component('btn-components',{
+        template:'#temp2',
+    })
+
+    var vm=new Vue({
+        el:'#div',
+        data:{
+            flag:true
+        },
+        methods:{
+            changeyes(){
+                this.flag=true
+            },
+            changeno(){
+                this.flag=false
+            }
+        }
+    })
+</script>
+</body>
+</html>
